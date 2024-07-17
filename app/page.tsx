@@ -1,10 +1,8 @@
-import HeroCarousel from "@/components/HeroCarousel";
-import Searchbar from "@/components/Searchbar";
+import HeroCarousel from "@/components/HeroCarousel"
+import Searchbar from "@/components/Searchbar"
 import Image from "next/image"
-import { getAllProducts } from "@/lib/actions";
-import Product from "@/lib/models/product.model";
-import ProductCard from "@/components/ProductCard";
-
+import { getAllProducts } from "@/lib/actions"
+import ProductCard from "@/components/ProductCard"
 
 const Home = async () => {
   const allProducts = await getAllProducts();
@@ -36,7 +34,7 @@ const Home = async () => {
             <Searchbar />
           </div>
 
-          <HeroCarousel /> 
+          <HeroCarousel />
         </div>
       </section>
 
@@ -45,7 +43,7 @@ const Home = async () => {
 
         <div className="flex flex-wrap gap-x-8 gap-y-16">
           {allProducts?.map((product) => (
-            <ProductCard key = {product._id} product = {product} />
+            <ProductCard key={product._id} product={product} />
           ))}
         </div>
       </section>

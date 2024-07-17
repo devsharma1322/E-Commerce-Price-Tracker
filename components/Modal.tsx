@@ -1,7 +1,7 @@
 "use client"
 
 import { FormEvent, Fragment, useState } from 'react'
-import { Dialog, Transition } from '@headlessui/react'
+import { Dialog, Transition, TransitionChild } from '@headlessui/react'
 import Image from 'next/image'
 import { addUserEmailToProduct } from '@/lib/actions'
 
@@ -38,7 +38,7 @@ const Modal = ({ productId }: Props) => {
       <Transition appear show={isOpen} as={Fragment}>
         <Dialog as="div" onClose={closeModal} className="dialog-container">
           <div className="min-h-screen px-4 text-center">
-            <Transition.Child
+            <TransitionChild
               as={Fragment}
               enter="ease-out duration-300"
               enterFrom="opacity-0"
@@ -48,7 +48,7 @@ const Modal = ({ productId }: Props) => {
               leaveTo="opacity-0"
             >
               <Dialog.Overlay className="fixed inset-0" /> 
-            </Transition.Child>
+            </TransitionChild>
 
             <span
               className="inline-block h-screen align-middle"
