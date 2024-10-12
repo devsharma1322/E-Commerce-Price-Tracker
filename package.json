@@ -9,15 +9,17 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@headlessui/react": "^2.1.2",
+    "@headlessui/react": "^1.4.2",
     "axios": "^1.7.2",
-    "cheerio": "^1.0.0-rc.12",
+    "cheerio": "^1.0.0",
+    "lucide-react": "^0.452.0",
     "mongoose": "^8.5.1",
-    "next": "14.2.5",
+    "next": "^14.2.15",
     "nodemailer": "^6.9.14",
     "react": "^18",
     "react-dom": "^18",
-    "react-responsive-carousel": "^3.2.23"
+    "react-responsive-carousel": "^3.2.23",
+    "react-toastify": "^10.0.5"
   },
   "devDependencies": {
     "@types/node": "^20",
