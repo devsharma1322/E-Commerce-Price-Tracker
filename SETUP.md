@@ -1,11 +1,11 @@
-# How to Run Trackazon Locally & Live
+# How to Run PriceHawk Locally & Live
 
 ## Prerequisites
 
 - **Node.js** v18 or higher
 - **npm** or **yarn**
 - A **MongoDB** database (free tier on [MongoDB Atlas](https://www.mongodb.com/atlas) works)
-- An **Outlook/Hotmail email** for sending alerts (already configured as `trackazon@outlook.com`)
+- An **Outlook/Hotmail email** for sending alerts (already configured as `pricehawk@outlook.com`)
 
 ---
 
@@ -30,7 +30,7 @@ EMAIL_PASSWORD=your_outlook_app_password
 | Variable | Description |
 |----------|-------------|
 | `MONGODB_URI` | Your MongoDB connection string |
-| `EMAIL_PASSWORD` | The password (or app password) for `trackazon@outlook.com` |
+| `EMAIL_PASSWORD` | The password (or app password) for `pricehawk@outlook.com` |
 
 ---
 

@@ -1,4 +1,4 @@
-# Trackazon — Amazon Price Tracker
+# PriceHawk — Amazon Price Tracker
 
 An automated Amazon price tracking app that monitors products and sends email alerts when prices drop, items restock, or big discounts appear.
 

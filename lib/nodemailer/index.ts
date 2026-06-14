@@ -27,10 +27,10 @@ export async function generateEmailBody(
 
   switch (type) {
     case Notification.WELCOME:
-      subject = `Welcome to Trackazon for ${shortenedTitle}`;
+      subject = `Welcome to PriceHawk for ${shortenedTitle}`;
       body = `
           <div>
-            <h2>Welcome to Trackazon 🚀</h2>
+            <h2>Welcome to PriceHawk 🚀</h2>
             <p>You are now tracking ${product.title}.</p>
             <p>Here's an example of how you'll receive updates:</p>
             <div style="border: 1px solid #ccc; padding: 10px; background-color: #f8f8f8;">

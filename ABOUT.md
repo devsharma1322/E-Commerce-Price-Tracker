@@ -1,8 +1,8 @@
-# Trackazon — Amazon Price Tracker
+# PriceHawk — Amazon Price Tracker
 
 ## What Does This App Do?
 
-Trackazon watches Amazon product prices for you — so you don't have to.
+PriceHawk watches Amazon product prices for you — so you don't have to.
 
 ### How It Works (Simple Version)
 
