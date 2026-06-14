@@ -20,7 +20,7 @@ const HeroCarousel = () => {
                     <Image src={image.imgUrl} alt={image.alt} width={484} height={484} className="object-contain" key={image.alt} />
                 ))}
             </Carousel>
-            <Image src='assets/icons/hand-drawn-arrow.svg' alt="arrow" width={175} height={175} className="max-xl:hidden absolute -left-[15%] bottom-0" />
+            <Image src='/assets/icons/hand-drawn-arrow.svg' alt="arrow" width={175} height={175} className="max-xl:hidden absolute -left-[15%] bottom-0" />
         </div>
     )
 }

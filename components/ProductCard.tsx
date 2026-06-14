@@ -10,7 +10,11 @@ const ProductCard = ({ product }: Props) => {
     return (
         <Link href={`/products/${product._id}`} className="product-card">
             <div className="product-card_img-container">
-                <Image src={product.image} alt={product.title} width={200} height={200} quality={100} className="product-card_img" />
+                {product.image ? (
+                    <Image src={product.image} alt={product.title} width={200} height={200} quality={100} className="product-card_img" />
+                ) : (
+                    <div className="w-[200px] h-[200px] bg-gray-200 flex items-center justify-center text-gray-400">No Image</div>
+                )}
             </div>
             <div className="flex flex-col gap-3">
                 <h3 className="product-title">{product.title}</h3>

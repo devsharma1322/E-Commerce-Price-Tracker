@@ -3,14 +3,14 @@ import mongoose from 'mongoose';
 const productSchema = new mongoose.Schema({
     url: { type: String, required: true, unique: true },
     currency: { type: String, required: true },
-    image: { type: String, required: true },
+    image: { type: String, required: false, default: '' },
     title: { type: String, required: true },
     currentPrice: { type: Number, required: true },
     originalPrice: { type: Number, required: true },
     priceHistory: [
         {
             price: { type: Number, required: true },
-            data: { type: Date, default: Date.now }
+            date: { type: Date, default: Date.now }
         }
     ],
     lowestPrice: { type: Number },

@@ -10,10 +10,11 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 
 type Props = {
-    params: { id: string }
+    params: Promise<{ id: string }>
 }
 
-const ProductDetails = async ({ params: { id } }: Props) => {
+const ProductDetails = async ({ params }: Props) => {
+    const { id } = await params;
     const product: Product = await getProductById(id);
 
     if (!product) redirect('/');
@@ -24,7 +25,11 @@ const ProductDetails = async ({ params: { id } }: Props) => {
         <div className="product-container">
             <div className="flex gap-28 xl:flex-row flex-col">
                 <div className="product-image">
-                    <Image src={product.image} alt={product.title} width={580} height={400} quality={100} className="mx-auto" />
+                    {product.image ? (
+                        <Image src={product.image} alt={product.title} width={580} height={400} quality={100} className="mx-auto" />
+                    ) : (
+                        <div className="w-full h-[400px] bg-gray-200 flex items-center justify-center text-gray-400">No Image Available</div>
+                    )}
                 </div>
                 <div className="flex-1 flex flex-col">
                     <div className="flex justify-between items-start gap-5 flex-wrap pb-6">
@@ -49,7 +54,7 @@ const ProductDetails = async ({ params: { id } }: Props) => {
                                     <p className="text-sm text-secondary font-semibold">{product.reviewsCount} Reviews</p>
                                 </div>
                             </div>
-                            <p className="text-sm text-black opacity-50"><span className="text-primary-green font-semibold">{Math.floor((Number(product.stars) / 5) * 100)}%</span> of buyers have recommened this.</p>
+                            <p className="text-sm text-black opacity-50"><span className="text-primary-green font-semibold">{product.stars && product.stars !== 'N/A' ? `${Math.floor((Number(product.stars) / 5) * 100)}%` : 'N/A'}</span> of buyers have recommened this.</p>
                         </div>
                     </div>
                     <div className="my-7 flex flex-col gap-5">

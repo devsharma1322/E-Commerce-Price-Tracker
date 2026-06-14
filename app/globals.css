@@ -87,7 +87,11 @@
 
   /* MODAL */
   .dialog-container {
-    @apply fixed inset-0 z-10 overflow-y-auto bg-black bg-opacity-60;
+    @apply fixed inset-0 z-10 overflow-y-auto p-4 rounded-2xl border-none bg-transparent;
+  }
+
+  .dialog-container::backdrop {
+    @apply bg-black/60;
   }
 
   .dialog-content {
