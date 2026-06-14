@@ -7,61 +7,81 @@ import { NextResponse } from "next/server";
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
+export const maxDuration = 60;
 
-export async function GET() {
+export async function GET(request: Request) {
     try {
-        connectToDB();
+        await connectToDB();
 
         const products = await Product.find({});
 
-        if (!products) throw new Error('No products found');
+        if (!products || products.length === 0) {
+            return NextResponse.json({ message: "No products to update" });
+        }
 
-        const updatedProducts = await Promise.all(
+        const updatedProducts = await Promise.allSettled(
             products.map(async (currentProduct) => {
-                const scrapedProduct = await scrapedAmazonProduct(currentProduct.url);
+                try {
+                    const scrapedProduct = await scrapedAmazonProduct(currentProduct.url);
 
-                if (!scrapedProduct) throw new Error('No product found');
+                    if (!scrapedProduct) {
+                        console.warn(`[Cron] Skipping ${currentProduct.url} — scrape returned empty`);
+                        return null;
+                    }
 
-                const updatedPriceHistory: any = [
-                    ...currentProduct.priceHistory,
-                    { price: scrapedProduct.currentPrice }
-                ];
+                    const updatedPriceHistory: any = [
+                        ...currentProduct.priceHistory,
+                        { price: scrapedProduct.currentPrice }
+                    ];
 
-                const product = {
-                    ...scrapedProduct,
-                    priceHistory: updatedPriceHistory,
-                    lowestPrice: getLowestPrice(updatedPriceHistory),
-                    highestPrice: getHighestPrice(updatedPriceHistory),
-                    averagePrice: getAveragePrice(updatedPriceHistory)
-                }
-
-                const updatedProduct = await Product.findOneAndUpdate(
-                    { url: product.url },
-                    product
-                );
-
-                const emailNotifactionType = getEmailNotifType(scrapedProduct, currentProduct);
-
-                if (emailNotifactionType && updatedProduct.users.length > 0) {
-                    const productInfo = {
-                        title: updatedProduct.title,
-                        url: updatedProduct.url
+                    const product = {
+                        ...scrapedProduct,
+                        priceHistory: updatedPriceHistory,
+                        lowestPrice: getLowestPrice(updatedPriceHistory),
+                        highestPrice: getHighestPrice(updatedPriceHistory),
+                        averagePrice: getAveragePrice(updatedPriceHistory)
                     };
 
-                    const emailContent = await generateEmailBody(productInfo, emailNotifactionType);
+                    const updatedProduct = await Product.findOneAndUpdate(
+                        { url: product.url },
+                        product,
+                        { new: true }
+                    );
 
-                    const userEmails = updatedProduct.users.map((user: any) => user.email);
+                    const emailNotifactionType = getEmailNotifType(scrapedProduct, currentProduct);
 
-                    await sendEmail(emailContent, userEmails);
+                    if (emailNotifactionType && updatedProduct?.users?.length > 0) {
+                        const productInfo = {
+                            title: updatedProduct.title,
+                            url: updatedProduct.url
+                        };
+
+                        const emailContent = await generateEmailBody(productInfo, emailNotifactionType);
+
+                        const userEmails = updatedProduct.users.map((user: any) => user.email);
+
+                        await sendEmail(emailContent, userEmails);
+                    }
+                    return updatedProduct;
+                } catch (innerError: any) {
+                    console.error(`[Cron] Error processing ${currentProduct.url}: ${innerError.message}`);
+                    return null;
                 }
-                return updatedProduct;
             })
-        )
+        );
+
+        const successful = updatedProducts.filter(r => r.status === 'fulfilled' && r.value !== null).length;
+        const failed = updatedProducts.length - successful;
+
         return NextResponse.json({
             message: "Ok",
-            data: updatedProducts,
+            data: { total: products.length, successful, failed },
         });
-    } catch (error) {
-        throw new Error(`Error in GET: ${error}`);
+    } catch (error: any) {
+        console.error(`[Cron] Fatal error: ${error.message}`);
+        return NextResponse.json(
+            { error: `Error in cron: ${error.message}` },
+            { status: 500 }
+        );
     }
-};
+}

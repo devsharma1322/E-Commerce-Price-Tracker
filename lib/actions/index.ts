@@ -12,10 +12,14 @@ export async function scrapeAndStoreProduct(productUrl: string) {
     if (!productUrl) return;
 
     try {
-        await connectToDB();  // Await the DB connection
+        const db = await connectToDB();  // Await the DB connection
+        
         const scrapedProduct = await scrapedAmazonProduct(productUrl);
 
-        if (!scrapedProduct) return;
+        if (!scrapedProduct) {
+            console.log(scrapedProduct)
+            return;
+        }
 
         let product = scrapedProduct;
 
@@ -51,6 +55,7 @@ export async function scrapeAndStoreProduct(productUrl: string) {
 
 export async function getProductById(productId: string) {
     try {
+        console.log(productId)
         await connectToDB();  // Await the DB connection
 
         const product = await Product.findOne({ _id: productId });
