@@ -11,14 +11,15 @@ const THRESHOLD_PERCENTAGE = 40;
 
 export function extractPrice(...elements: any) {
     for (const element of elements) {
-        const priceText = element.text().trim();
+        const priceText = element.first().text().trim();
 
         if (priceText) {
-            const cleanPrice = priceText.replace(/[^\d.]/g, '');
-
-            if (cleanPrice) {
-                const withDecimal = cleanPrice.match(/\d+\.\d{1,2}/)?.[0];
-                return withDecimal || cleanPrice.match(/\d+/)?.[0] || cleanPrice;
+            const priceMatch = priceText.match(/[\d,]+\.?\d*/);
+            if (priceMatch) {
+                const cleanPrice = priceMatch[0].replace(/,/g, '');
+                if (cleanPrice && !isNaN(Number(cleanPrice))) {
+                    return cleanPrice;
+                }
             }
         }
     }

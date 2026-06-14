@@ -100,14 +100,13 @@ export async function getSimilarProducts(productId: string) {
 
 export async function addUserEmailToProduct(productId: string, userEmail: string) {
     try {
-        await connectToDB();  // Await the DB connection
+        await connectToDB();
 
         const product = await Product.findById(productId);
 
         if (!product) return;
 
         const userExists = product.users.some((user: User) => user.email === userEmail);
-        console.log(userExists);
 
         if (!userExists) {
             product.users.push({ email: userEmail });
